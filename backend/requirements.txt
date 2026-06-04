@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic-settings
+openai
+pdfplumber
+python-docx
+python-pptx
+reportlab
+python-multipart
