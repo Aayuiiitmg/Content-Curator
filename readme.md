@@ -42,7 +42,7 @@ pip install -r backend/requirements.txt
 ### Step 2 — Run the App (every time)
 
 ```powershell
-cd "c:\Users\Aayush Shankar\OneDrive\Desktop\content-curator-git\Content-Curator"
+cd "...\Content-Curator"
 
 .venv\Scripts\python.exe -m streamlit run app.py
 ```
