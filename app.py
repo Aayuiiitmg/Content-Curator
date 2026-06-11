@@ -334,18 +334,72 @@ with chat_col:
                                 )
 
     # Advanced Options (Compliance · Templates)
-    with st.expander("🛠️ Advanced Options (Compliance · Templates)", expanded=False):
+    with st.expander("⚙️ Advanced Options (Compliance · Templates)", expanded=False):
         adv1, adv2 = st.columns(2)
+
+        # ── LEFT: Compliance Frameworks ──────────────────────────────────────
         with adv1:
-            st.markdown("**Compliance Frameworks**")
-            st.session_state.compliance_sel = st.multiselect(
-                "Frameworks",
-                options=COMPLIANCE_FRAMEWORKS,
-                default=st.session_state.compliance_sel,
-                label_visibility="collapsed",
+            st.markdown(
+                '<p style="font-size:13px; font-weight:600; color:#1F2937; margin-bottom:10px;">Compliance Frameworks</p>',
+                unsafe_allow_html=True,
             )
+
+            # Render selected frameworks as navy chip tags
+            compliance_to_remove = None
+            chips_html_parts = []
+            for ci, fw in enumerate(st.session_state.compliance_sel):
+                short = (fw[:18] + "…") if len(fw) > 18 else fw
+                chips_html_parts.append(
+                    f'<span class="adv-chip" id="chip_{ci}">{short}</span>'
+                )
+            chips_row = "".join(chips_html_parts)
+            st.markdown(
+                f'<div class="adv-chips-row">{chips_row}</div>',
+                unsafe_allow_html=True,
+            )
+
+            # Individual remove buttons rendered as small ✕ per chip
+            if st.session_state.compliance_sel:
+                btn_cols = st.columns(len(st.session_state.compliance_sel) + 1)
+                for ci, fw in enumerate(st.session_state.compliance_sel):
+                    with btn_cols[ci]:
+                        if st.button("✕", key=f"rm_fw_{ci}", help=f"Remove: {fw}"):
+                            compliance_to_remove = ci
+                with btn_cols[-1]:
+                    pass  # spacer
+                if compliance_to_remove is not None:
+                    st.session_state.compliance_sel.pop(compliance_to_remove)
+                    st.rerun()
+
+            # Add framework dropdown
+            available = [f for f in COMPLIANCE_FRAMEWORKS if f not in st.session_state.compliance_sel]
+            if available:
+                add_fw = st.selectbox(
+                    "Add framework",
+                    [""] + available,
+                    label_visibility="collapsed",
+                    key="add_fw_select",
+                )
+                if add_fw:
+                    st.session_state.compliance_sel.append(add_fw)
+                    st.rerun()
+
+        # ── RIGHT: Style Templates ────────────────────────────────────────────
         with adv2:
-            st.markdown("**Style Templates**")
+            st.markdown(
+                '<p style="font-size:13px; font-weight:600; color:#1F2937; margin-bottom:10px;">Style Templates</p>',
+                unsafe_allow_html=True,
+            )
+
+            # Upload zone — styled like the screenshot
+            st.markdown(
+                '<div class="adv-upload-zone">'
+                '<span class="adv-upload-icon">⬆</span>'
+                '<span class="adv-upload-btn-label">Upload</span>'
+                '<span class="adv-upload-hint">200MB per file&nbsp;•&nbsp;PPTX, DOCX, PDF</span>'
+                '</div>',
+                unsafe_allow_html=True,
+            )
             tpl_up = st.file_uploader(
                 "Upload template",
                 type=["pptx", "docx", "pdf"],
@@ -353,21 +407,29 @@ with chat_col:
                 label_visibility="collapsed",
             )
             if tpl_up and tpl_up.name not in [t["name"] for t in st.session_state.template_files]:
-                st.session_state.template_files.append({"name": tpl_up.name, "size": f"{tpl_up.size//1024} KB", "type": tpl_up.name.split('.')[-1]})
+                st.session_state.template_files.append({
+                    "name": tpl_up.name,
+                    "size": f"{tpl_up.size//1024} KB",
+                    "type": tpl_up.name.split('.')[-1],
+                })
                 st.rerun()
 
-            # Template chips
+            # File list with icons and × buttons
             tpl_to_remove = None
             for ti, tpl in enumerate(st.session_state.template_files):
-                tc1, tc2 = st.columns([5, 1])
+                ext = tpl["type"].lower()
+                icon = "🟦" if ext == "pptx" else ("📝" if ext == "docx" else "📄")
+                tc1, tc2 = st.columns([6, 1])
                 with tc1:
                     st.markdown(
-                        f'<span style="font-size:11.5px; background:#F3F4F6; border:1px solid #D1D5DB; '
-                        f'padding:3px 8px; border-radius:5px; color:#374151;">📄 {tpl["name"]}</span>',
+                        f'<div class="adv-file-row">'
+                        f'<span class="adv-file-icon">{icon}</span>'
+                        f'<span class="adv-file-name">{tpl["name"]}</span>'
+                        f'</div>',
                         unsafe_allow_html=True,
                     )
                 with tc2:
-                    if st.button("✕", key=f"rm_tpl_{ti}"):
+                    if st.button("✕", key=f"rm_tpl_{ti}", help=f"Remove {tpl['name']}"):
                         tpl_to_remove = ti
             if tpl_to_remove is not None:
                 st.session_state.template_files.pop(tpl_to_remove)

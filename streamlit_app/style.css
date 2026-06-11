@@ -1,5 +1,8 @@
 /* ── Force Light Theme via Streamlit CSS Variables ────────────────────────── */
-:root, [data-testid="stAppViewContainer"], [data-testid="stSidebar"], [data-testid="stHeader"] {
+:root,
+[data-testid="stAppViewContainer"],
+[data-testid="stSidebar"],
+[data-testid="stHeader"] {
     --primary-color: #003B7A !important;
     --background-color: #F7F9FC !important;
     --secondary-background-color: #FFFFFF !important;
@@ -10,7 +13,9 @@
 /* ── General Typography & Reset ───────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html, body, [data-testid="stAppViewContainer"] {
+html,
+body,
+[data-testid="stAppViewContainer"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     color: #1F2937 !important;
     background-color: #F7F9FC !important;
@@ -18,7 +23,7 @@ html, body, [data-testid="stAppViewContainer"] {
 
 /* Hide standard Streamlit header and footer */
 [data-testid="stHeader"] {
-    background-color: rgba(0,0,0,0) !important;
+    background-color: rgba(0, 0, 0, 0) !important;
     border-bottom: none !important;
     z-index: 99 !important;
 }
@@ -89,7 +94,7 @@ div[data-baseweb="select"] select {
 }
 
 /* Ensure focus states are clean and high contrast */
-textarea:focus, 
+textarea:focus,
 input:focus,
 div[data-baseweb="input"]:focus-within,
 div[data-baseweb="textarea"]:focus-within {
@@ -100,7 +105,7 @@ div[data-baseweb="textarea"]:focus-within {
 
 /* ── Force Light Theme on File Uploader ──────────────────────────────────── */
 div[data-testid="stFileUploader"],
-div[data-testid="stFileUploader"] > section,
+div[data-testid="stFileUploader"]>section,
 div[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"],
 section[data-testid="stFileUploaderDropzone"] {
     background-color: #F9FAFB !important;
@@ -275,7 +280,7 @@ section[data-testid="stSidebar"] div[data-baseweb="select"] {
 }
 
 /* Active generated asset buttons in chat */
-.stButton > button[key^="asset_"] {
+.stButton>button[key^="asset_"] {
     background-color: #EEF2FF !important;
     color: #003B7A !important;
     border: 1px solid #C7D2FE !important;
@@ -334,7 +339,7 @@ section[data-testid="stSidebar"] div[data-baseweb="select"] {
     border: 1px solid #DCE3EC;
     border-radius: 2px 14px 14px 14px;
     padding: 12px 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
 }
 
 .check-item {
@@ -427,7 +432,7 @@ section[data-testid="stSidebar"] div[data-baseweb="select"] {
     display: block;
 }
 
-div.stDownloadButton > button {
+div.stDownloadButton>button {
     background-color: #FFFFFF !important;
     color: #003B7A !important;
     border: 1px solid #DCE3EC !important;
@@ -444,7 +449,7 @@ div.stDownloadButton > button {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
 }
 
-div.stDownloadButton > button:hover {
+div.stDownloadButton>button:hover {
     border-color: #003B7A !important;
     background-color: #F0F5FA !important;
     box-shadow: 0 4px 6px -1px rgba(0, 59, 122, 0.08) !important;
@@ -471,4 +476,93 @@ div.stDownloadButton > button:hover {
 .recent-doc-meta {
     font-size: 10.5px;
     color: #6B7280;
+}
+
+/* ── Advanced Options — Compliance Chip Tags ─────────────────────────────── */
+.adv-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.adv-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: #1E3A5F;
+    color: #FFFFFF;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 6px;
+    gap: 6px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Advanced Options — Upload Zone ──────────────────────────────────────── */
+.adv-upload-zone {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1.5px dashed #C8D3DF;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background-color: #F9FAFB;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.adv-upload-zone:hover {
+    border-color: #003B7A;
+    background-color: #EEF2FF;
+}
+
+.adv-upload-icon {
+    font-size: 16px;
+    color: #003B7A;
+}
+
+.adv-upload-btn-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #003B7A;
+    background-color: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    padding: 5px 14px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.adv-upload-hint {
+    font-size: 11.5px;
+    color: #6B7280;
+}
+
+/* ── Advanced Options — File Row ─────────────────────────────────────────── */
+.adv-file-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background-color: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.adv-file-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.adv-file-name {
+    font-size: 12px;
+    color: #374151;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
