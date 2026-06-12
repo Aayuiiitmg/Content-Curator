@@ -19,7 +19,7 @@ AI-powered content generation platform for Tata Steel. Upload documents and gene
 
 ```powershell
 # Navigate to the project folder
-cd "c:\Users\Aayush Shankar\OneDrive\Desktop\content-curator-git\Content-Curator"
+cd "...\Content-Curator"
 
 # Create a virtual environment
 python -m venv .venv
@@ -44,12 +44,18 @@ pip install -r backend/requirements.txt
 ```powershell
 cd "...\Content-Curator"
 
-.venv\Scripts\python.exe -m streamlit run app.py
+.venv\Scripts\python.exe -m streamlit run streamlit_app/app.py
 ```
 
 Then open **http://localhost:8501** in your browser.
 
-> **Tip:** Use `.venv\Scripts\python.exe -m streamlit run app.py` instead of just `streamlit run app.py` — Streamlit is installed inside the virtual environment, not globally.
+> **⚠️ Important:** Use `streamlit_app/app.py` (the new modular architecture) — NOT the old `app.py` in the root directory.
+> 
+> The new modular version has:
+> - **☰ Filters toggle** button at the top
+> - **Single clean upload bar** (no duplicates)
+> - Component-based architecture with proper separation of concerns
+> - All filters accessible from the sidebar
 
 ---
 
