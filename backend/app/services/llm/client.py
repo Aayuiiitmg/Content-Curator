@@ -36,6 +36,9 @@ class OpenRouterClient:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
+            "response_format" : {
+                "type": "json_object"
+            }
         }
 
         logger.debug(f"Calling OpenRouter model={self.model}")
@@ -54,7 +57,13 @@ class OpenRouterClient:
             )
 
         data = response.json()
+        #print("This is the raw data",data)
         content = data["choices"][0]["message"]["content"]
+        print("==========JSON DATA===============")
+        print(content)
+        print("==========JSON DATA ENDS===============")
+        if content is None:
+            raise ValueError("LLM returned empty response")
         logger.debug(f"LLM response length: {len(content)} chars")
         return content
 
@@ -62,10 +71,9 @@ class OpenRouterClient:
         self,
         system_prompt: str,
         user_prompt: str,
-        max_tokens: int = 2048,
+        max_tokens: int = 6000,
         temperature: float = 0.5,
     ) -> dict:
-        """Chat and parse response as JSON. Strips markdown fences if present."""
         raw = await self.chat(system_prompt, user_prompt, max_tokens, temperature)
         # Strip ```json ... ``` fences
         cleaned = raw.strip()
@@ -75,6 +83,8 @@ class OpenRouterClient:
         try:
             return json.loads(cleaned)
         except json.JSONDecodeError as e:
+            #print("RAW LLM RESPONSE:")
+            #print(cleaned)
             logger.error(f"Failed to parse LLM JSON: {e}\nRaw: {raw[:500]}")
             raise ValueError(f"LLM returned invalid JSON: {e}") from e
 

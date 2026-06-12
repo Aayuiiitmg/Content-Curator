@@ -33,7 +33,8 @@ async def generate_outline(
     data = await llm_client.chat_json(
         system_prompt=OUTLINE_SYSTEM,
         user_prompt=user_prompt,
-        max_tokens=2048,
+        max_tokens=4000,
+        temperature=0.5
     )
 
     outline_items = [OutlineItem(**item) for item in data.get("outline", [])]

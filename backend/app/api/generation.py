@@ -7,7 +7,7 @@ from backend.app.schemas.generation import (
 )
 from backend.app.services.llm.outline_generator import generate_outline
 from backend.app.services.llm.slide_generator import generate_slides
-from backend.app.api.ingestion import get_session_store
+from backend.app.services.ingestion.session_store import session_store
 from backend.app.utils.logger import logger
 
 router = APIRouter(prefix="/generate", tags=["Generation"])
@@ -23,7 +23,6 @@ def get_presentation_store():
 @router.post("/outline", response_model=OutlineResponse)
 async def create_outline(
     req: GenerationRequest,
-    session_store: dict = Depends(get_session_store),
 ):
     """Generate a slide outline from ingested content."""
     content_obj = session_store.get(req.session_id)
@@ -49,7 +48,6 @@ async def create_outline(
 @router.post("/slides", response_model=GenerationResponse)
 async def create_slides(
     req: GenerationRequest,
-    session_store: dict = Depends(get_session_store),
     pres_store: dict = Depends(get_presentation_store),
 ):
     """Generate full slide content (outline + per-slide) from ingested content."""

@@ -9,21 +9,14 @@ from backend.app.services.ingestion.email_ingestor import extract_text_from_plai
 from backend.app.utils.file_utils import detect_mime_type, is_allowed_file, save_upload_file, cleanup_temp_file
 from backend.app.utils.logger import logger
 from backend.app.config import settings
+from backend.app.services.ingestion.session_store import session_store
 
 router = APIRouter(prefix="/ingest", tags=["Ingestion"])
-
-# In-memory session store (replace with Redis/DB in production)
-_session_store: dict[str, ExtractedContent] = {}
-
-
-def get_session_store():
-    return _session_store
 
 
 @router.post("/upload", response_model=UploadResponse)
 async def upload_file(
     file: UploadFile = File(...),
-    store: dict = Depends(get_session_store),
 ):
     """Upload a PDF, DOCX, PPTX, or .eml file and extract its text."""
     if file.size and file.size > settings.max_upload_bytes:
@@ -53,12 +46,12 @@ async def upload_file(
         raise HTTPException(422, "No text could be extracted from the file.")
 
     session_id = uuid.uuid4().hex
-    store[session_id] = ExtractedContent(
+    session_store.set(session_id, ExtractedContent(
         session_id=session_id,
         raw_text=text,
         source_filename=file.filename,
         mime_type=mime,
-    )
+    ))
     logger.info(f"Ingested file={file.filename} session={session_id} chars={len(text)}")
 
     return UploadResponse(
@@ -73,7 +66,6 @@ async def upload_file(
 @router.post("/paste", response_model=UploadResponse)
 async def paste_text(
     body: PasteRequest,
-    store: dict = Depends(get_session_store),
 ):
     """Accept pasted email or plain text."""
     text = extract_text_from_plain(body.text)
@@ -81,12 +73,12 @@ async def paste_text(
         raise HTTPException(422, "Text too short after cleaning.")
 
     session_id = uuid.uuid4().hex
-    store[session_id] = ExtractedContent(
+    session_store.set(session_id, ExtractedContent(
         session_id=session_id,
         raw_text=text,
         source_filename=body.label or "pasted_text",
         mime_type="text/plain",
-    )
+    ))
     logger.info(f"Pasted text session={session_id} chars={len(text)}")
 
     return UploadResponse(
@@ -99,9 +91,8 @@ async def paste_text(
 
 
 @router.get("/session/{session_id}", response_model=ExtractedContent)
-async def get_session(session_id: str, store: dict = Depends(get_session_store)):
-    """Retrieve extracted content for a session."""
-    content = store.get(session_id)
+async def get_session(session_id: str):
+    content = session_store.get(session_id)
     if not content:
         raise HTTPException(404, f"Session {session_id} not found.")
     return content

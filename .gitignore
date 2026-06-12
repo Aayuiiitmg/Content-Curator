@@ -1,22 +1,43 @@
 .env
+.env.*
+.python-version
 __pycache__/
-*.pyc
+**/__pycache__/
+*.py[cod]
 *.pyo
 *.pyd
 .Python
 .venv/
 venv/
 env/
-*.egg-info/
-dist/
 build/
+dist/
+pip-wheel-metadata/
+*.egg-info/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.coverage
+.pytest_cache/
+
+# Runtime and temp files
 temp/
 logs/
 *.log
+*.pot
+*.mo
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*~
 .DS_Store
+Thumbs.db
+Desktop.ini
 
 # Frontend artifacts
 frontend/node_modules/
