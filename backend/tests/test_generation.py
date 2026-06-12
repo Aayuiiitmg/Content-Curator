@@ -89,7 +89,7 @@ async def test_generate_outline():
         session_id = paste_resp.json()["session_id"]
 
         with patch(
-            "app.api.generation.generate_outline",
+            "backend.app.api.generation.generate_outline",
             new_callable=AsyncMock,
             return_value=MOCK_OUTLINE,
         ):
@@ -114,11 +114,11 @@ async def test_generate_slides():
         session_id = paste_resp.json()["session_id"]
 
         with patch(
-            "app.api.generation.generate_outline",
+            "backend.app.api.generation.generate_outline",
             new_callable=AsyncMock,
             return_value=MOCK_OUTLINE,
         ), patch(
-            "app.api.generation.generate_slides",
+            "backend.app.api.generation.generate_slides",
             new_callable=AsyncMock,
             return_value=MOCK_SLIDES,
         ):

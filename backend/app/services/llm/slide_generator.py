@@ -2,7 +2,12 @@ import json
 import asyncio
 from typing import List
 from backend.app.services.llm.client import llm_client
-from backend.app.services.llm.prompts import SLIDE_SYSTEM, SLIDE_USER, SLIDE_EDIT_SYSTEM, SLIDE_EDIT_USER
+from backend.app.services.llm.prompts import (
+    SLIDE_SYSTEM,
+    SLIDE_USER,
+    SLIDE_EDIT_SYSTEM,
+    SLIDE_EDIT_USER,
+)
 from backend.app.schemas.slide import SlideContent
 from backend.app.schemas.generation import OutlineItem
 from backend.app.utils.logger import logger
@@ -30,9 +35,20 @@ async def _generate_single_slide(
     data = await llm_client.chat_json(
         system_prompt=SLIDE_SYSTEM,
         user_prompt=user_prompt,
-        max_tokens=800,
+        max_tokens=2000,
+        temperature=0.4,
     )
-    return SlideContent(**data)
+
+    slide = SlideContent(**data)
+
+    logger.info(f"""
+    Generated Slide {slide.slide_number}
+    Title: {slide.title}
+    Layout: {slide.layout}
+    Visual: {slide.visual_suggestion}
+    """)
+
+    return slide
 
 
 async def generate_slides(
@@ -59,7 +75,10 @@ async def generate_slides(
                     slide_number=item.slide_number,
                     title=item.title,
                     bullets=item.key_points[:5],
-                    speaker_notes="[Generation failed — edit manually]",
+                    speaker_notes="",
+                    layout="bullets",
+                    visual_suggestion=None,
+                    design_notes=None,
                 )
 
     tasks = [guarded(item) for item in outline_items]
@@ -80,6 +99,7 @@ async def edit_slide(
     data = await llm_client.chat_json(
         system_prompt=SLIDE_EDIT_SYSTEM,
         user_prompt=user_prompt,
-        max_tokens=800,
+        max_tokens=1200,
+        temperature=0.3
     )
     return SlideContent(**data)

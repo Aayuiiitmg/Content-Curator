@@ -3,7 +3,6 @@ from fastapi import APIRouter, HTTPException, Depends
 from backend.app.schemas.slide import SlideContent, SlideUpdateRequest, SlideRegenerateRequest
 from backend.app.services.llm.slide_generator import edit_slide
 from backend.app.api.generation import get_presentation_store
-from backend.app.api.ingestion import get_session_store
 from backend.app.utils.logger import logger
 
 router = APIRouter(prefix="/slides", tags=["Slides"])
