@@ -44,18 +44,12 @@ pip install -r backend/requirements.txt
 ```powershell
 cd "...\Content-Curator"
 
-.venv\Scripts\python.exe -m streamlit run streamlit_app/app.py
+$env:PYTHONPATH="frontend"; .venv\Scripts\python.exe -m streamlit run frontend/app.py
 ```
 
 Then open **http://localhost:8501** in your browser.
 
-> **⚠️ Important:** Use `streamlit_app/app.py` (the new modular architecture) — NOT the old `app.py` in the root directory.
-> 
-> The new modular version has:
-> - **☰ Filters toggle** button at the top
-> - **Single clean upload bar** (no duplicates)
-> - Component-based architecture with proper separation of concerns
-> - All filters accessible from the sidebar
+> **⚠️ Important:** The `PYTHONPATH="frontend"` prefix is required so Python can find the `streamlit_app/` package inside `frontend/`.
 
 ---
 
@@ -134,13 +128,17 @@ pytest backend/tests/ -v
 
 ```
 Content-Curator/
-├── app.py                   # Streamlit frontend entry point
-├── streamlit_app/
-│   ├── mock_data.py         # Sample data & logic
-│   ├── exporters.py         # DOCX / XLSX / PPTX / PDF exporters
-│   ├── style.css            # Custom UI styles
-│   ├── tata_steel_logo.png  # Branding assets
-│   └── tata_logo.png
+├── frontend/
+│   ├── app.py               # Streamlit frontend entry point
+│   └── streamlit_app/
+│       ├── app.py           # Main app (modular)
+│       ├── state.py         # Session state management
+│       ├── api_client.py    # Backend API client
+│       ├── exporters.py     # DOCX / XLSX / PPTX / PDF exporters
+│       ├── components/      # UI components
+│       ├── services/        # Frontend services
+│       ├── styles/          # CSS styles
+│       └── config/          # Configuration & mock data
 ├── backend/
 │   ├── requirements.txt     # Backend Python dependencies
 │   └── app/
