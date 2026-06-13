@@ -51,6 +51,7 @@ if css_path.exists():
     st.html(f"<style>{css_path.read_text(encoding='utf-8')}</style>")
 
 # Also inject viewport adjustment style overrides
+# Inject viewport / spacing overrides
 st.html("""
 <style>
 /* Adjust main block padding to make room for fixed header */
@@ -63,6 +64,21 @@ section.main > div.block-container {
 /* Reduce default widget gaps */
 .stSelectbox, .stTextInput, .stTextArea, .stFileUploader {
     margin-bottom: 8px !important;
+}
+/* Hide all native sidebar collapse/expand controls */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapseButton"],
+button[aria-label="Close sidebar"],
+button[aria-label="Collapse sidebar"] {
+    display: none !important;
+}
+/* Force sidebar always visible */
+section[data-testid="stSidebar"] {
+    display: flex !important;
+    visibility: visible !important;
+    transform: none !important;
+    min-width: 240px !important;
 }
 </style>
 """)
@@ -129,8 +145,8 @@ def run_generation(prompt: str, out_type: str):
 
 # ── Fixed Header ──────────────────────────────────────────────────────────────
 st.html(f"""
-<div class="tata-header">
-    <div class="tata-header-left">
+<div class="tata-header" id="tata-main-header">
+    <div class="tata-header-left" style="display:flex;align-items:center;gap:10px;">
         <img src="{ts_logo_b64}" style="height: 32px;" alt="TATA STEEL" />
     </div>
     <div class="tata-header-center">
@@ -146,6 +162,7 @@ st.html(f"""
     </div>
 </div>
 """)
+
 
 # Overlay interactive Streamlit toggle over the space prepared in the header
 st.html('<div class="header-toggle-container">')
@@ -391,15 +408,7 @@ with chat_col:
                 unsafe_allow_html=True,
             )
 
-            # Upload zone — styled like the screenshot
-            st.markdown(
-                '<div class="adv-upload-zone">'
-                '<span class="adv-upload-icon">⬆</span>'
-                '<span class="adv-upload-btn-label">Upload</span>'
-                '<span class="adv-upload-hint">200MB per file&nbsp;•&nbsp;PPTX, DOCX, PDF</span>'
-                '</div>',
-                unsafe_allow_html=True,
-            )
+            # Upload zone — real file uploader only
             tpl_up = st.file_uploader(
                 "Upload template",
                 type=["pptx", "docx", "pdf"],

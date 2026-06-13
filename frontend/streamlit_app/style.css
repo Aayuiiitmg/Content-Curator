@@ -217,6 +217,22 @@ div[data-testid="stFileUploaderDropzone"] div,
     z-index: 1000;
 }
 
+/* ── Sidebar: always visible, collapse controls hidden ───────────────────── */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapseButton"],
+button[aria-label="Close sidebar"],
+button[aria-label="Collapse sidebar"] {
+    display: none !important;
+}
+
+section[data-testid="stSidebar"] {
+    display: flex !important;
+    visibility: visible !important;
+    transform: none !important;
+    min-width: 240px !important;
+}
+
 /* ── Left Sidebar Navigation (Visual Hierarchy) ──────────────────────────── */
 section[data-testid="stSidebar"] {
     background-color: #FFFFFF !important;
