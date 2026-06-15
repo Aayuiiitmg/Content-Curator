@@ -44,7 +44,7 @@ pip install -r backend/requirements.txt
 ```powershell
 cd "...\Content-Curator"
 
-$env:PYTHONPATH="frontend"; .venv\Scripts\python.exe -m streamlit run frontend/app.py
+$env:PYTHONPATH="frontend"; .venv\Scripts\python.exe -m streamlit run frontend/streamlit_app/app.py
 ```
 
 Then open **http://localhost:8501** in your browser.
