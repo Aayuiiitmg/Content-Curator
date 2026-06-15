@@ -128,8 +128,7 @@ pytest backend/tests/ -v
 
 ```
 Content-Curator/
-├── frontend/
-│   ├── app.py               # Streamlit frontend entry point
+├── frontend/             
 │   └── streamlit_app/
 │       ├── app.py           # Main app (modular)
 │       ├── state.py         # Session state management
