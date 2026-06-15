@@ -5,6 +5,15 @@ Thin entry point that orchestrates all components.
 ~50 lines as specified.
 """
 
+import sys
+from pathlib import Path
+
+# Ensure `frontend/` is on sys.path so `streamlit_app` package imports work
+# when running: streamlit run frontend/streamlit_app/app.py
+_FRONTEND_ROOT = Path(__file__).resolve().parent.parent
+if str(_FRONTEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(_FRONTEND_ROOT))
+
 import streamlit as st
 from streamlit_app import state
 from streamlit_app.components import (

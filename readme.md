@@ -44,12 +44,12 @@ pip install -r backend/requirements.txt
 ```powershell
 cd "...\Content-Curator"
 
-$env:PYTHONPATH="frontend"; .venv\Scripts\python.exe -m streamlit run frontend/streamlit_app/app.py
+.venv\Scripts\python.exe -m streamlit run frontend/streamlit_app/app.py
 ```
 
 Then open **http://localhost:8501** in your browser.
 
-> **⚠️ Important:** The `PYTHONPATH="frontend"` prefix is required so Python can find the `streamlit_app/` package inside `frontend/`.
+> Run this from the `Content-Curator` folder (project root), not from inside `frontend/`.
 
 ---
 
@@ -128,9 +128,9 @@ pytest backend/tests/ -v
 
 ```
 Content-Curator/
-├── frontend/             
+├── frontend/
 │   └── streamlit_app/
-│       ├── app.py           # Main app (modular)
+│       ├── app.py           # Streamlit entry point — run this
 │       ├── state.py         # Session state management
 │       ├── api_client.py    # Backend API client
 │       ├── exporters.py     # DOCX / XLSX / PPTX / PDF exporters
